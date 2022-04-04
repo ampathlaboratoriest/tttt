@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMPATH COVID Result Validate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <!-- Image and text -->
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand">
+                <img src="./AMPATH COVID Result Validate_files/ampath_logo.png" alt="" width="50" height="50"
+                    class="d-inline-block align-top" />
+                AMPATH COVID Result Validation
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row gy-3">
+            <div class="col-8">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="txtid" placeholder="a" />
+                    <label for="floatingInput">Id / Passport No:</label>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="txtpin" placeholder="a" />
+                    <label for="floatingInput">Code:</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gy-3">
+            <div class="col-12">
+                <button type="button" id="btnValidate" class="btn btn-primary" onclick="validate()">
+                    Validate
+                </button>
+                <button type="button" id="btnClear" class="btn btn-light" onclick="clear()">
+                    Clear
+                </button>
+            </div>
+            <div class="col-12">
+                <div id="progValidate" class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                        aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div id="divError" class="alert alert-warning" role="alert" style="display: block"></div>
+                <div class="col-12">
+                    <div id="divSuccess" class="alert alert-success" role="alert" style="display: none"></div>
+                </div>
+            </div>
+
+            <div class="row gy-3" id="divResults">
+                <div class="col-12">
+                    <b>Patient Name:</b><br />
+                    <div id="divPatientName">Patel, Rakeshkumar Pravinbhai</div>
+                    <br />
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="row">Test Ordered</th>
+                                <th scope="row">Test Result</th>
+                                <th scope="row">Verification Date</th>
+                                <th scope="row">Specimen Number</th>
+                                <th scope="row">Req. Number</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableResultsBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+            let TestOrdered = "SARS-CoV-2 RT-PCR";
+            let TestResult = "Negative";
+            let VerificationDate = "17/03/2022 11:04";
+            let SpecimenNumber = "0316:AL00984R";
+            let ReqNumber = "40465094";
+            let PatientName = "Patel, Rakeshkumar Pravinbhai";
+            let PassportNo = "T9727673";
+
+            function validate() {
+                $("#progValidate").show();
+
+                setTimeout(() => {
+                    //get textbox values
+                    let id = $("#txtid").val();
+                    let pin = $("#txtpin").val();
+
+
+                    $("#progValidate").hide();
+                    $("#divError").hide();
+                    $("#divSuccess").hide();
+
+                    if (id == "" || pin == "") {
+                        $("#divError").html("Please enter ID and PIN");
+                        $("#divError").show();
+                        return;
+                    }
+                    if (id.toLowerCase() != PassportNo.toLowerCase() || pin.toLowerCase() != ReqNumber.toLowerCase()) {
+                        $("#divError").html("Invalid ID or PIN");
+                        $("#divError").show();
+                        return;
+                    }
+                    if (id.toLowerCase()==PassportNo.toLowerCase() && pin.toLowerCase()==ReqNumber.toLowerCase()) {
+                        $("#divSuccess").html("Valid ID and PIN");
+                        $("#divSuccess").show();
+                        
+                    }
+                }, Math.floor(Math.random() * 1000));
+
+
+
+                
+            }
+
+            //populate the table
+            function populateTable() {
+                $("#divPatientName").html(PatientName);
+                $("#tableResultsBody").html(`
+                    <tr>
+                        <th>${TestOrdered}</th>
+                        <td>${TestResult}</td>
+                        <td>${VerificationDate}</td>
+                        <td>${SpecimenNumber}</td>
+                        <td>${ReqNumber}</td>
+                    </tr>
+                `);
+            }
+
+            function clear() {
+                $("#txtid").val("");
+                $("#txtpin").val("");
+                $("#progValidate").hide();
+                $("#divSuccess").hide();
+                $("#divError").hide();
+
+            }
+            $("#divError").hide();
+            $("#progValidate").hide();
+            populateTable();
+
+        </script>
+</body>
+
+</html>
